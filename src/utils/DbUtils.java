@@ -11,7 +11,8 @@ public class DbUtils {
     private static String password =  "ganesh";
     private static String user =  "ganesh";
  
-    public static void initDb(){     
+    public static void initDb()
+	{     
         try {
             Class.forName("org.apache.derby.jdbc.ClientDriver");
             con = DriverManager.getConnection(databaseurl, user, password);       
@@ -53,7 +54,8 @@ public class DbUtils {
         }
     } 
 	
-public static ArrayList<HashMap<String,String>> getMovieDetails(){
+	public static ArrayList<HashMap<String,String>> getMovieDetails()
+	{
         try {
             Statement st = con.createStatement();
             ResultSet r = st.executeQuery("SELECT * FROM MOVIES");
@@ -68,56 +70,62 @@ public static ArrayList<HashMap<String,String>> getMovieDetails(){
                hm.put("FolderName",r.getString(7));
                hm.put("Overview", r.getString(8));
                alsm.add(hm);
-
            }    
            return alsm;
         } catch (SQLException ex) {
             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-        }
-        public static ArrayList<String> getCastBasedMovieDetails(String searchCast){
-         ArrayList<String> hm = new ArrayList<>();
+    }
+		
+    public static ArrayList<String> getCastBasedMovieDetails(String searchCast)
+	{	
+        ArrayList<String> hm = new ArrayList<>();
         try {
             Statement st = con.createStatement();
             String query ="SELECT * FROM MOVIES WHERE MovieCast LIKE '%" + searchCast.replace("'", "''")+ "%'";
             ResultSet r = st.executeQuery(query);       
-            while(r.next()){     
+            while(r.next())
+			{     
                  hm.add(r.getString(2).replace("''", "'"));            
-           }  
+            }  
             Collections.sort(hm);
             return hm;
         } catch (SQLException ex) {
             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-        }
+    }
         
-                public static ArrayList<String> getGenreBasedMovieDetails(String searchCast){
-         ArrayList<String> hm = new ArrayList<>();
+    public static ArrayList<String> getGenreBasedMovieDetails(String searchCast)
+	{
+        ArrayList<String> hm = new ArrayList<>();
         try {
             Statement st = con.createStatement();
             String query ="SELECT * FROM MOVIES WHERE Genre LIKE '%" + searchCast+ "%'";
             ResultSet r = st.executeQuery(query);       
-            while(r.next()){     
+            while(r.next())
+			{     
                  hm.add(r.getString(2).replace("''", "'"));            
-           }  
+            }  
             Collections.sort(hm);
             return hm;
         } catch (SQLException ex) {
             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-        }
+    }
            	
-	 public static String[] getLibraryFolders(){
+	public static String[] getLibraryFolders()
+	{
         try {
             Statement st = con.createStatement();
-           ResultSet r = st.executeQuery("SELECT * FROM LIBRARYFOLDER");
+            ResultSet r = st.executeQuery("SELECT * FROM LIBRARYFOLDER");
             int count = rowCount("LIBRARYFOLDER");
             String[] folders = new String[count];
             int i=0;
-            while(r.next()){
+            while(r.next())
+			{
                 folders[i] = r.getString(2);
                 i = i+1;
             }
@@ -129,10 +137,11 @@ public static ArrayList<HashMap<String,String>> getMovieDetails(){
         return null;
 	}
 	
-         public static void storeInMovieDb(HashMap<String,String> hm){
+    public static void storeInMovieDb(HashMap<String,String> hm){
         String id, title, overview, posterPath, genres, cast, folderName;
         try {
-            PreparedStatement ps1=con.prepareStatement("INSERT INTO Movies(MovieTitle, MovieId, Genre, MovieCast, PosterPath, FolderName, Overview) VALUES(?,?,?,?,?,?,?)");
+            PreparedStatement ps1=con.prepareStatement("INSERT INTO Movies(MovieTitle, MovieId,"
+					+"Genre, MovieCast, PosterPath, FolderName, Overview) VALUES(?,?,?,?,?,?,?)");
             id = hm.get("Id");
             title = hm.get("Title").replace("'", "''");
             System.out.println(title);
@@ -165,7 +174,8 @@ public static ArrayList<HashMap<String,String>> getMovieDetails(){
         }             
     }
 	
-	public static void deleteLibraryFolders(String folder){
+	public static void deleteLibraryFolders(String folder)
+	{
         try {
             String query = "DELETE FROM LIBRARYFOLDER WHERE FOLDERPATH = '" + folder+"'";
             //System.out.println(query);
@@ -173,11 +183,12 @@ public static ArrayList<HashMap<String,String>> getMovieDetails(){
             ps1.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
-    }
+		}
 	
 	}
         
-        public static void deleteMoviesById(String movieID){
+    public static void deleteMoviesById(String movieID)
+	{
         try {
             String query = "DELETE FROM MOVIES WHERE  MOVIEID = '" + movieID+"'";
             //System.out.println(query);
@@ -189,7 +200,8 @@ public static ArrayList<HashMap<String,String>> getMovieDetails(){
 	
 }  
         
-        public static void deleteMoviesByFolderName(String FolderName){
+    public static void deleteMoviesByFolderName(String FolderName)
+	{
         try {
             String query = "DELETE FROM MOVIES WHERE  FolderName = '" + FolderName.replace("'", "''")+"'";
             //System.out.println(query);
@@ -201,7 +213,8 @@ public static ArrayList<HashMap<String,String>> getMovieDetails(){
 	
 }        
 
-    public static int rowCount(String table){            
+    public static int rowCount(String table)
+	{            
         try {
             Statement st = con.createStatement();
            ResultSet r = st.executeQuery("SELECT COUNT(*) AS rowcount FROM " + table);
