@@ -20,15 +20,17 @@ public class UrlUtils
 	private static final CloseableHttpClient httpclient = HttpClients.createDefault();
 	private static HttpGet httpget;
 	public static final HashMap<String, String> genresHM = getGenreIds();
+	private static String baseImagePath = "F:\\Academic\\JAVA\\moviedDB Data\\" ;
 
-    public static String getBaseImagePath() {
+    public static String getBaseImagePath() 
+	{
         return baseImagePath;
     }
-                    private static String baseImagePath = "F:\\Academic\\JAVA\\moviedDB Data\\" ;
-                 	
-	public static HashMap<String,String> getMovieDetailsByName(String moviename){
+                  	
+	public static HashMap<String,String> getMovieDetailsByName(String moviename)
+	{
     	HashMap<String,String> hm = new HashMap<>();
-                    String movieFolderName = moviename;
+        String movieFolderName = moviename;
     	moviename = moviename.replace(" ", "+");
     	String starturl = "https://api.themoviedb.org/3/search/movie?api_key=";
     	String middleurl = "&language=en-US&query=";
@@ -38,42 +40,43 @@ public class UrlUtils
     	String id,title,overview,posterPath,genres;
     	StringBuilder temp = new StringBuilder();
     	try {
-				CloseableHttpResponse response = httpclient.execute(httpget);			
-				HttpEntity entity = response.getEntity();
+			CloseableHttpResponse response = httpclient.execute(httpget);			
+			HttpEntity entity = response.getEntity();
 
-				InputStream instream = entity.getContent();
-				String result = convertStreamToString(instream);
+			InputStream instream = entity.getContent();
+			String result = convertStreamToString(instream);
 
-				JSONObject mainjson = new JSONObject(result);
-				boolean flag = Objects.equals(mainjson.get("total_results").toString(), "0");
-				if(!flag)
-				{
-					JSONArray resultsArray = mainjson.getJSONArray("results");
-					JSONObject resultOne = resultsArray.getJSONObject(0);
+			JSONObject mainjson = new JSONObject(result);
+			boolean flag = Objects.equals(mainjson.get("total_results").toString(), "0");
+			if(!flag)
+			{
+				JSONArray resultsArray = mainjson.getJSONArray("results");
+				JSONObject resultOne = resultsArray.getJSONObject(0);
 
-					String [] genreIdsArray = resultOne.get("genre_ids").toString().replace("[", "").replace("]", "").split(",");
-					for(String s : genreIdsArray) {				
-							temp.append(genresHM.get(s));
-							temp.append(", ");
-					}
-					temp.deleteCharAt(temp.length() - 1);
-					temp.deleteCharAt(temp.length() - 1);
-					genres = temp.toString();					
-					id = resultOne.get("id").toString();
-					title = resultOne.get("title").toString();
-					overview = resultOne.get("overview").toString();                                                                 
-					posterPath = resultOne.get("poster_path").toString();
-					hm.put("Title", title);
-					hm.put("Id", id);
-					hm.put("Overview", overview);
-					hm.put("Genres", genres);			
-					hm.put("PosterPath", posterPath);
-					hm.put("FolderName",movieFolderName);
-					hm.put("Cast", getCastByID(id));
-					saveImgByPosterPath(id, hm.get("PosterPath"));
-				}else {
-					return hm = null;
+				String [] genreIdsArray = resultOne.get("genre_ids").toString().replace("[", "").replace("]", "").split(",");
+				for(String s : genreIdsArray) 
+				{				
+						temp.append(genresHM.get(s));
+						temp.append(", ");
 				}
+				temp.deleteCharAt(temp.length() - 1);
+				temp.deleteCharAt(temp.length() - 1);
+				genres = temp.toString();					
+				id = resultOne.get("id").toString();
+				title = resultOne.get("title").toString();
+				overview = resultOne.get("overview").toString();                                                                 
+				posterPath = resultOne.get("poster_path").toString();
+				hm.put("Title", title);
+				hm.put("Id", id);
+				hm.put("Overview", overview);
+				hm.put("Genres", genres);			
+				hm.put("PosterPath", posterPath);
+				hm.put("FolderName",movieFolderName);
+				hm.put("Cast", getCastByID(id));
+				saveImgByPosterPath(id, hm.get("PosterPath"));
+			}else {
+				return hm = null;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("No Internet Connection");
@@ -92,30 +95,31 @@ public class UrlUtils
     	httpget = new HttpGet(url);
     	StringBuilder temp = new StringBuilder();
     	try {
-				CloseableHttpResponse response = httpclient.execute(httpget);			
-				HttpEntity entity = response.getEntity();
+			CloseableHttpResponse response = httpclient.execute(httpget);			
+			HttpEntity entity = response.getEntity();
 
-				InputStream instream = entity.getContent();
-				String result = convertStreamToString(instream);
+			InputStream instream = entity.getContent();
+			String result = convertStreamToString(instream);
 
-				JSONObject mainjson = new JSONObject(result);
-				JSONArray castArr = mainjson.getJSONArray("cast");
+			JSONObject mainjson = new JSONObject(result);
+			JSONArray castArr = mainjson.getJSONArray("cast");
 
-				int len = castArr.length();
-				//len = len >= 5 ? 5:len;
-				JSONObject [] casts = new JSONObject[len];
-				for(int i = 0; i<len ; i++) {
-					casts[i] = castArr.getJSONObject(i);
-					temp.append(casts[i].get("name").toString());
-					temp.append(", ");
-				}
-				if(temp.length() == 0) {
-						cast = "";
-				}else {
-					temp.deleteCharAt(temp.length() - 1);
-					temp.deleteCharAt(temp.length() - 1);
-					cast = temp.toString();					
-				}		
+			int len = castArr.length();
+			//len = len >= 5 ? 5:len;
+			JSONObject [] casts = new JSONObject[len];
+			for(int i = 0; i<len ; i++) 
+			{
+				casts[i] = castArr.getJSONObject(i);
+				temp.append(casts[i].get("name").toString());
+				temp.append(", ");
+			}
+			if(temp.length() == 0) {
+					cast = "";
+			}else {
+				temp.deleteCharAt(temp.length() - 1);
+				temp.deleteCharAt(temp.length() - 1);
+				cast = temp.toString();					
+			}		
     	}catch (IOException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
@@ -130,7 +134,8 @@ public class UrlUtils
     	String url = baseurl + posterPath;
     	String imagePath = baseImagePath + id +".jpg";
 		File temp = new File(baseImagePath);
-		if(!temp.exists()){
+		if(!temp.exists())
+		{
 			temp.mkdir();
 		}
 		temp = new File(imagePath);
@@ -147,9 +152,9 @@ public class UrlUtils
 				in.close();
 				out.close();
 			 } catch (MalformedURLException e) {
-			e.printStackTrace();
+				 e.printStackTrace();
 			 } catch (IOException e) {
-			e.printStackTrace();
+				 e.printStackTrace();
 			}
         }        
     }
