@@ -307,7 +307,6 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 
         castList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {"","","","",""};
-
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -327,7 +326,6 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 
         genreList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "", "", "", "", "" };
-            //String[] strings = genrehm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+");
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -468,7 +466,6 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed
         if(jList2.getSelectedIndex() != -1)
 		{
-            //System.out.println(jList2.getSelectedValue());
             DbUtils.deleteLibraryFolders(jList2.getSelectedValue());
             ArrayList<String> deleteMovies = FileUtils.getMovieNames(jList2.getSelectedValue());
             for(Object o:deleteMovies)
@@ -524,7 +521,6 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 				UrlUtils.saveImgByPosterPath(idhm.get(selValue), posterPathhm.get(selValue));
 				imageLabel.setIcon(new ImageIcon(temp));
 			}
-		   // System.out.println(selValue+"====   ");
 		   temp = casthm.get(selValue).replace(", ", "\n");
 		   castList.setListData(temp.split("[\\r\\n]+"));
 		   temp = genrehm.get(selValue).replace(", ", "\n");
