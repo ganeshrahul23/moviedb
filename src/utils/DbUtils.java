@@ -10,11 +10,12 @@ public class DbUtils {
     private static String databaseurl = "jdbc:derby://localhost:1527/ganesh";
     private static String password =  "ganesh";
     private static String user =  "ganesh";
+	private static String className = "org.apache.derby.jdbc.ClientDriver";
  
     public static void initDb()
 	{     
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Class.forName(className);
             con = DriverManager.getConnection(databaseurl, user, password);       
             
         } catch (Exception e) {
@@ -144,7 +145,7 @@ public class DbUtils {
 					+"Genre, MovieCast, PosterPath, FolderName, Overview) VALUES(?,?,?,?,?,?,?)");
             id = hm.get("Id");
             title = hm.get("Title").replace("'", "''");
-            System.out.println(title);
+            //System.out.println(title);
             overview = hm.get("Overview");
             posterPath = hm.get("PosterPath");
             genres = hm.get("Genres");
@@ -238,5 +239,8 @@ public class DbUtils {
 
     public static void setUser(String aUser) {
         user = aUser;
+    }
+	public static void setClassName(String aClassName) {
+        className = aClassName;
     }
 }

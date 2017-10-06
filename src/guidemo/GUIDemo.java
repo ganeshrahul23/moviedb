@@ -33,9 +33,10 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         imagePath = UrlUtils.getBaseImagePath();
         initComponents();   
     }
-    public GUIDemo(String imagePath,String dburl,String password,String user) 
+    public GUIDemo(String imagePath,String className,String dburl,String password,String user) 
 	{  
         UrlUtils.setBaseImagePath(imagePath);
+		DbUtils.setClassName(className);
         DbUtils.setDatabaseurl(dburl);
         DbUtils.setPassword(password);
         DbUtils.setUser(user);
@@ -574,7 +575,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         }    
         allMoviesal = DbUtils.getMovieDetails();
         getMovieData(); 
-        OptionPane.showMessageDialog(null, "The Library is Updated");
+        JOptionPane.showMessageDialog(null, "The Library is Updated");
     }//GEN-LAST:event_updateLibraryButtonActionPerformed
 
     private void castListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_castListValueChanged

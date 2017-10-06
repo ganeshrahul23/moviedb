@@ -110,8 +110,12 @@ public class UrlUtils
 			for(int i = 0; i<len ; i++) 
 			{
 				casts[i] = castArr.getJSONObject(i);
-				temp.append(casts[i].get("name").toString());
-				temp.append(", ");
+				if((casts[i].get("name").toString().length() + temp.length()) <= 2000){
+						temp.append(casts[i].get("name").toString());
+						temp.append(", ");                                                                                  
+				}else{
+					break;
+				}
 			}
 			if(temp.length() == 0) {
 					cast = "";
