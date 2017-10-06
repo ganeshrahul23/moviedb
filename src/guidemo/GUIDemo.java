@@ -24,7 +24,8 @@ private String imagePath ;
 
 
 private ArrayList<HashMap<String,String>> allMoviesal ;
-    public GUIDemo() {         
+    public GUIDemo() 
+	{         
         DbUtils.initDb();
         allMoviesal = DbUtils.getMovieDetails();
         getMovieData(); 
@@ -32,7 +33,8 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         imagePath = UrlUtils.getBaseImagePath();
         initComponents();   
     }
-      public GUIDemo(String imagePath,String dburl,String password,String user) {  
+    public GUIDemo(String imagePath,String dburl,String password,String user) 
+	{  
         UrlUtils.setBaseImagePath(imagePath);
         DbUtils.setDatabaseurl(dburl);
         DbUtils.setPassword(password);
@@ -46,7 +48,8 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     }
     
     
-   public void getMovieData(){
+   public void getMovieData()
+   {
         movieTitleal.clear();
         foldersListal.clear();
         genrehm.clear();
@@ -54,15 +57,16 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         casthm.clear();
         overviewhm.clear();
         posterPathhm.clear();
-        for(int i=0; i<allMoviesal.size(); i++){
-                        String temp = allMoviesal.get(i).get("Title").replace("''", "'");
-                        movieTitleal.add(temp);
-                        foldersListal.add(allMoviesal.get(i).get("FolderName"));
-                        genrehm.put(temp, allMoviesal.get(i).get("Genres"));
-                        idhm.put(temp, allMoviesal.get(i).get("Id"));
-                        casthm.put(temp, allMoviesal.get(i).get("Cast"));
-                        posterPathhm.put(temp, allMoviesal.get(i).get("PosterPath"));
-                        overviewhm.put(temp, allMoviesal.get(i).get("Overview"));					             
+        for(int i=0; i<allMoviesal.size(); i++)
+		{
+			String temp = allMoviesal.get(i).get("Title").replace("''", "'");
+			movieTitleal.add(temp);
+			foldersListal.add(allMoviesal.get(i).get("FolderName"));
+			genrehm.put(temp, allMoviesal.get(i).get("Genres"));
+			idhm.put(temp, allMoviesal.get(i).get("Id"));
+			casthm.put(temp, allMoviesal.get(i).get("Cast"));
+			posterPathhm.put(temp, allMoviesal.get(i).get("PosterPath"));
+			overviewhm.put(temp, allMoviesal.get(i).get("Overview"));					             
        }
         Set<String> hs = new HashSet<>();
         hs.addAll(movieTitleal);
@@ -419,7 +423,8 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
        int returnVal = chooser.showOpenDialog(this);
        File file = null;
-       if (returnVal == JFileChooser.APPROVE_OPTION){
+       if (returnVal == JFileChooser.APPROVE_OPTION)
+	   {
            file = chooser.getSelectedFile();
            BrowseTextField.setText(file.getAbsolutePath());
        }      
@@ -440,35 +445,39 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         if(!Objects.equals(path, ""))
         {
             ArrayList <String> movies = FileUtils.getMovieNames(path);
-            for(Object o:movies){
-                    HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
-                    if(hm != null) {
-                            DbUtils.storeInMovieDb(hm);                       
-                    }
+            for(Object o:movies)
+			{
+				HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
+				if(hm != null) 
+				{
+					DbUtils.storeInMovieDb(hm);                       
+				}
             }
             DbUtils.storeInMovieLibraryFolderDbDb(path);
-           allMoviesal = DbUtils.getMovieDetails();
-           getMovieData();
-           movieCount = movieTitleal.size();
-           jList2.setListData(DbUtils.getLibraryFolders());
-           BrowseTextField.setText("");
-           JOptionPane.showMessageDialog(null, "The Folders are Added");
+            allMoviesal = DbUtils.getMovieDetails();
+            getMovieData();
+            movieCount = movieTitleal.size();
+            jList2.setListData(DbUtils.getLibraryFolders());
+            BrowseTextField.setText("");
+            JOptionPane.showMessageDialog(null, "The Folders are Added");
            
     }                   
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed
-        if(jList2.getSelectedIndex() != -1){
+        if(jList2.getSelectedIndex() != -1)
+		{
             //System.out.println(jList2.getSelectedValue());
             DbUtils.deleteLibraryFolders(jList2.getSelectedValue());
             ArrayList<String> deleteMovies = FileUtils.getMovieNames(jList2.getSelectedValue());
-           for(Object o:deleteMovies){
+            for(Object o:deleteMovies)
+			{
                DbUtils.deleteMoviesByFolderName(o.toString());
-           }
-           movieCount = DbUtils.rowCount("Movies");
-           allMoviesal = DbUtils.getMovieDetails();
-           getMovieData();
-           movieCount = movieTitleal.size();
+            }
+            movieCount = DbUtils.rowCount("Movies");
+            allMoviesal = DbUtils.getMovieDetails();
+            getMovieData();
+            movieCount = movieTitleal.size();
             jList2.setListData(DbUtils.getLibraryFolders());
             JOptionPane.showMessageDialog(null, "The Folders are Removed");
         }
@@ -476,19 +485,22 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 
     private void movieLibraryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movieLibraryButtonActionPerformed
         showMovieList.setListData(movieTitleal.toArray(new String[movieTitleal.size()]));
-        if(!movieTitleal.isEmpty()){
-                titleTextField.setText(movieTitleal.get(0));
-                 genreList.setListData(genrehm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+"));
-                 castList.setListData(casthm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+"));                
-                String selValue = titleTextField.getText();
-                String temp = imagePath + idhm.get(selValue) + ".jpg";
-                File f = new File(temp);
-                if(f.exists()){
-                     imageLabel.setIcon(new ImageIcon(temp));
-                }else{
-                   UrlUtils.saveImgByPosterPath(idhm.get(selValue), posterPathhm.get(selValue));
-                   imageLabel.setIcon(new ImageIcon(temp));
-               }
+        if(!movieTitleal.isEmpty())
+		{		
+            titleTextField.setText(movieTitleal.get(0));
+			genreList.setListData(genrehm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+"));
+			castList.setListData(casthm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+"));                
+			String selValue = titleTextField.getText();
+			String temp = imagePath + idhm.get(selValue) + ".jpg";
+			File f = new File(temp);
+			if(f.exists())
+			{
+				 imageLabel.setIcon(new ImageIcon(temp));
+			}else
+			{
+			   UrlUtils.saveImgByPosterPath(idhm.get(selValue), posterPathhm.get(selValue));
+			   imageLabel.setIcon(new ImageIcon(temp));
+		    }
         }
         CardLayout cl = (CardLayout)(basePanel.getLayout());
         cl.show(basePanel, "card4");
@@ -497,23 +509,26 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     private void showMovieListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_showMovieListValueChanged
         if(showMovieList.getSelectedIndex() != -1)
         {
+			
             String selValue = showMovieList.getSelectedValue();
-         titleTextField.setText(selValue);
-         String temp;
-         temp = imagePath + idhm.get(selValue) + ".jpg";
-         File f = new File(temp);
-         if(f.exists()){
-              imageLabel.setIcon(new ImageIcon(temp));
-         }else{
-            UrlUtils.saveImgByPosterPath(idhm.get(selValue), posterPathhm.get(selValue));
-            imageLabel.setIcon(new ImageIcon(temp));
-        }
-       // System.out.println(selValue+"====   ");
-       temp = casthm.get(selValue).replace(", ", "\n");
-       castList.setListData(temp.split("[\\r\\n]+"));
-       temp = genrehm.get(selValue).replace(", ", "\n");
-       genreList.setListData(temp.split("[\\r\\n]+"));
-       overviewTextArea.setText(overviewhm.get(selValue));
+			titleTextField.setText(selValue);
+			String temp;
+			temp = imagePath + idhm.get(selValue) + ".jpg";
+			File f = new File(temp);
+			if(f.exists())
+			{
+				imageLabel.setIcon(new ImageIcon(temp));
+			}else
+			{
+				UrlUtils.saveImgByPosterPath(idhm.get(selValue), posterPathhm.get(selValue));
+				imageLabel.setIcon(new ImageIcon(temp));
+			}
+		   // System.out.println(selValue+"====   ");
+		   temp = casthm.get(selValue).replace(", ", "\n");
+		   castList.setListData(temp.split("[\\r\\n]+"));
+		   temp = genrehm.get(selValue).replace(", ", "\n");
+		   genreList.setListData(temp.split("[\\r\\n]+"));
+		   overviewTextArea.setText(overviewhm.get(selValue));
         }
     }//GEN-LAST:event_showMovieListValueChanged
 
@@ -521,11 +536,13 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         CardLayout cl = (CardLayout)(basePanel.getLayout());
         cl.show(basePanel, "card2");
     }//GEN-LAST:event_homeLibraryButtonActionPerformed
+	
     private void updateLibraryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateLibraryButtonActionPerformed
         ArrayList<String> moviesInDb = foldersListal;
         String[] strings = DbUtils.getLibraryFolders();
         ArrayList <String> foldersPresent = new ArrayList<>(); 
-        for(String s: strings){
+        for(String s: strings)
+		{
             foldersPresent.addAll(FileUtils.getMovieNames(s));
         }    
         Collections.sort(foldersPresent);        
@@ -534,40 +551,44 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         {        
         }else if(moviesInDb.size() > foldersPresent.size())
         {        
-                                moviesInDb.removeAll(foldersPresent);
-                                temp = moviesInDb;
-                                for(Object o : temp){
-                                        System.out.println("Deleting " + o.toString());
-                                        DbUtils.deleteMoviesByFolderName(o.toString());
-                                }                
+			moviesInDb.removeAll(foldersPresent);
+			temp = moviesInDb;
+			for(Object o : temp)
+			{
+				System.out.println("Deleting " + o.toString());
+				DbUtils.deleteMoviesByFolderName(o.toString());
+			}                
         }else if(moviesInDb.size() < foldersPresent.size())
         {
-                                foldersPresent.removeAll(moviesInDb);
-                                temp = foldersPresent;
-                                for(Object o : temp){                                  
-                                        HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
-                                        if(hm != null){
-                                                DbUtils.storeInMovieDb(hm);
-                                                System.out.println("Adding " + o.toString());
-                                        }
-                                }                             
+			foldersPresent.removeAll(moviesInDb);
+			temp = foldersPresent;
+			for(Object o : temp)
+			{                                  
+					HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
+					if(hm != null)
+					{
+						DbUtils.storeInMovieDb(hm);
+						System.out.println("Adding " + o.toString());
+					}
+			}                             
         }    
-            allMoviesal = DbUtils.getMovieDetails();
-            getMovieData(); 
-             JOptionPane.showMessageDialog(null, "The Library is Updated");
+        allMoviesal = DbUtils.getMovieDetails();
+        getMovieData(); 
+        OptionPane.showMessageDialog(null, "The Library is Updated");
     }//GEN-LAST:event_updateLibraryButtonActionPerformed
 
     private void castListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_castListValueChanged
-         if(castList.getSelectedIndex() != -1){
-                String temp =  castList.getSelectedValue();
-                if(!(Objects.equals(temp, "") || Objects.equals(temp, null)))
-                {
-                    castBasedDetails.clear();
-                    castBasedDetails = DbUtils.getCastBasedMovieDetails(temp);
-                    Collections.sort(castBasedDetails);
-                    showMovieList.setListData(castBasedDetails.toArray(new String[castBasedDetails.size()]));
-                }       
-         }
+        if(castList.getSelectedIndex() != -1)
+		{
+			String temp =  castList.getSelectedValue();
+			if(!(Objects.equals(temp, "") || Objects.equals(temp, null)))
+			{
+				castBasedDetails.clear();
+				castBasedDetails = DbUtils.getCastBasedMovieDetails(temp);
+				Collections.sort(castBasedDetails);
+				showMovieList.setListData(castBasedDetails.toArray(new String[castBasedDetails.size()]));
+			}       
+        }
     }//GEN-LAST:event_castListValueChanged
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
@@ -575,15 +596,16 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void genreListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_genreListValueChanged
-        if(genreList.getSelectedIndex() != -1){
-                String temp =  genreList.getSelectedValue();
-                if(!(Objects.equals(temp, "") || Objects.equals(temp, null)))
-                {
-                genreBasedDetails.clear();
-                genreBasedDetails = DbUtils.getGenreBasedMovieDetails(temp);
-                Collections.sort(genreBasedDetails);
-                showMovieList.setListData(genreBasedDetails.toArray(new String[genreBasedDetails.size()]));
-                }          
+        if(genreList.getSelectedIndex() != -1)
+		{
+            String temp =  genreList.getSelectedValue();
+			if(!(Objects.equals(temp, "") || Objects.equals(temp, null)))
+			{
+				genreBasedDetails.clear();
+				genreBasedDetails = DbUtils.getGenreBasedMovieDetails(temp);
+				Collections.sort(genreBasedDetails);
+				showMovieList.setListData(genreBasedDetails.toArray(new String[genreBasedDetails.size()]));
+			}          
         }
 
     }//GEN-LAST:event_genreListValueChanged
