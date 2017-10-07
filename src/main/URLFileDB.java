@@ -22,9 +22,9 @@ public class URLFileDB {
        
 		
        // System.out.println(movies);
-        //DbUtils.initDb();
-       // DbUtils.createMovieLibraryFolderDb();
-      //  DbUtils.createMovieDb();
+        DbUtils.initDb();
+       DbUtils.createMovieLibraryFolderDb();
+      DbUtils.createMovieDb();
        // DbUtils.createMovieLibraryFolderDb();
 //        System.out.println("Db created");
 //        for(Object o:movies){

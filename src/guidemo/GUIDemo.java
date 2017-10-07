@@ -36,7 +36,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     public GUIDemo(String imagePath,String className,String dburl,String password,String user) 
 	{  
         UrlUtils.setBaseImagePath(imagePath);
-		DbUtils.setClassName(className);
+        DbUtils.setClassName(className);
         DbUtils.setDatabaseurl(dburl);
         DbUtils.setPassword(password);
         DbUtils.setUser(user);
@@ -104,22 +104,22 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         AddButton = new javax.swing.JButton();
         RemoveButton = new javax.swing.JButton();
         OKButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        addedFoldersScrollPane = new javax.swing.JScrollPane();
+        addedFoldersList = new javax.swing.JList<>();
         movieLibraryPanel = new javax.swing.JPanel();
         movieTitleScrollPane = new javax.swing.JScrollPane();
         showMovieList = new javax.swing.JList<>();
         imageLabel = new javax.swing.JLabel();
         titleTextField = new javax.swing.JTextField();
         castLabel = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane6 = new javax.swing.JScrollPane();
+        genreLabel = new javax.swing.JLabel();
+        overviewScrollPane = new javax.swing.JScrollPane();
         overviewTextArea = new javax.swing.JTextArea();
         homeLibraryButton = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        castScrollPane = new javax.swing.JScrollPane();
         castList = new javax.swing.JList<>();
         resetButton = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        genreScrollPane = new javax.swing.JScrollPane();
         genreList = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -213,12 +213,12 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
             }
         });
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+        addedFoldersList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = DbUtils.getLibraryFolders();
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList2);
+        addedFoldersScrollPane.setViewportView(addedFoldersList);
 
         javax.swing.GroupLayout addFoldersPanelLayout = new javax.swing.GroupLayout(addFoldersPanel);
         addFoldersPanel.setLayout(addFoldersPanelLayout);
@@ -227,7 +227,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addFoldersPanelLayout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addGroup(addFoldersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .addComponent(addedFoldersScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
                     .addComponent(BrowseTextField))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(addFoldersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,7 +252,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
                         .addComponent(RemoveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
                         .addComponent(OKButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                    .addComponent(addedFoldersScrollPane))
                 .addGap(39, 39, 39))
         );
 
@@ -284,9 +284,9 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         castLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         castLabel.setText("Cast");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel3.setText("Genre");
+        genreLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        genreLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        genreLabel.setText("Genre");
 
         overviewTextArea.setEditable(false);
         overviewTextArea.setBackground(new java.awt.Color(240, 240, 240));
@@ -294,7 +294,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         overviewTextArea.setLineWrap(true);
         overviewTextArea.setWrapStyleWord(true);
         overviewTextArea.setRows(5);
-        jScrollPane6.setViewportView(overviewTextArea);
+        overviewScrollPane.setViewportView(overviewTextArea);
         overviewTextArea.setText(Objects.equals(titleTextField.getText(), "")?"":
             overviewhm.get(titleTextField.getText()).replace(", ", "\n"));
 
@@ -307,6 +307,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 
         castList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {"","","","",""};
+
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -315,7 +316,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
                 castListValueChanged(evt);
             }
         });
-        jScrollPane2.setViewportView(castList);
+        castScrollPane.setViewportView(castList);
 
         resetButton.setText("Reset");
         resetButton.addActionListener(new java.awt.event.ActionListener() {
@@ -326,6 +327,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 
         genreList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "", "", "", "", "" };
+            //String[] strings = genrehm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+");
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -334,7 +336,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
                 genreListValueChanged(evt);
             }
         });
-        jScrollPane3.setViewportView(genreList);
+        genreScrollPane.setViewportView(genreList);
 
         javax.swing.GroupLayout movieLibraryPanelLayout = new javax.swing.GroupLayout(movieLibraryPanel);
         movieLibraryPanel.setLayout(movieLibraryPanelLayout);
@@ -354,15 +356,15 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
                         .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addGroup(movieLibraryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(genreLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(castLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                         .addGroup(movieLibraryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(castScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(genreScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(42, 42, 42))
                     .addComponent(titleTextField)
-                    .addComponent(jScrollPane6))
+                    .addComponent(overviewScrollPane))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
         movieLibraryPanelLayout.setVerticalGroup(
@@ -386,13 +388,13 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
                                 .addGap(41, 41, 41)
                                 .addGroup(movieLibraryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(castLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(castScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(35, 35, 35)
                                 .addGroup(movieLibraryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(genreLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(genreScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(13, 13, 13)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(overviewScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -449,6 +451,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 				HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
 				if(hm != null) 
 				{
+                                                                                                    hm.put("FolderBasePath", path);
 					DbUtils.storeInMovieDb(hm);                       
 				}
             }
@@ -456,7 +459,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
             allMoviesal = DbUtils.getMovieDetails();
             getMovieData();
             movieCount = movieTitleal.size();
-            jList2.setListData(DbUtils.getLibraryFolders());
+            addedFoldersList.setListData(DbUtils.getLibraryFolders());
             BrowseTextField.setText("");
             JOptionPane.showMessageDialog(null, "The Folders are Added");
            
@@ -464,20 +467,20 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed
-        if(jList2.getSelectedIndex() != -1)
+        if(addedFoldersList.getSelectedIndex() != -1)
 		{
-            DbUtils.deleteLibraryFolders(jList2.getSelectedValue());
-            ArrayList<String> deleteMovies = FileUtils.getMovieNames(jList2.getSelectedValue());
-            for(Object o:deleteMovies)
-			{
-               DbUtils.deleteMoviesByFolderName(o.toString());
-            }
-            movieCount = DbUtils.rowCount("Movies");
+             String temp =   addedFoldersList.getSelectedValue();     
+             if(!Objects.equals(temp, ""))
+             {
+                             DbUtils.deleteLibraryFolders(temp);
+            DbUtils.deleteMoviesByFolderBasePath(temp);
+
             allMoviesal = DbUtils.getMovieDetails();
             getMovieData();
             movieCount = movieTitleal.size();
-            jList2.setListData(DbUtils.getLibraryFolders());
+            addedFoldersList.setListData(DbUtils.getLibraryFolders());
             JOptionPane.showMessageDialog(null, "The Folders are Removed");
+             }
         }
     }//GEN-LAST:event_RemoveButtonActionPerformed
 
@@ -521,6 +524,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 				UrlUtils.saveImgByPosterPath(idhm.get(selValue), posterPathhm.get(selValue));
 				imageLabel.setIcon(new ImageIcon(temp));
 			}
+		   // System.out.println(selValue+"====   ");
 		   temp = casthm.get(selValue).replace(", ", "\n");
 		   castList.setListData(temp.split("[\\r\\n]+"));
 		   temp = genrehm.get(selValue).replace(", ", "\n");
@@ -546,16 +550,18 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         ArrayList<String> temp = new ArrayList<>();      
         if(moviesInDb.size() == foldersPresent.size())
         {        
-        }else if(moviesInDb.size() > foldersPresent.size())
-        {        
-			moviesInDb.removeAll(foldersPresent);
-			temp = moviesInDb;
-			for(Object o : temp)
-			{
-				System.out.println("Deleting " + o.toString());
-				DbUtils.deleteMoviesByFolderName(o.toString());
-			}                
-        }else if(moviesInDb.size() < foldersPresent.size())
+        }
+//        else if(moviesInDb.size() > foldersPresent.size())
+//        {        
+//			moviesInDb.removeAll(foldersPresent);
+//			temp = moviesInDb;
+//			for(Object o : temp)
+//			{
+//				System.out.println("Deleting " + o.toString());
+//				DbUtils.deleteMoviesByFolderName(o.toString());
+//			}                
+//        }
+        else if(moviesInDb.size() < foldersPresent.size())
         {
 			foldersPresent.removeAll(moviesInDb);
 			temp = foldersPresent;
@@ -650,21 +656,21 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     private javax.swing.JButton RemoveButton;
     private javax.swing.JButton addFoldersButton;
     private javax.swing.JPanel addFoldersPanel;
+    private javax.swing.JList<String> addedFoldersList;
+    private javax.swing.JScrollPane addedFoldersScrollPane;
     private javax.swing.JPanel basePanel;
     private javax.swing.JLabel castLabel;
     private javax.swing.JList<String> castList;
+    private javax.swing.JScrollPane castScrollPane;
+    private javax.swing.JLabel genreLabel;
     private javax.swing.JList<String> genreList;
+    private javax.swing.JScrollPane genreScrollPane;
     private javax.swing.JButton homeLibraryButton;
     private javax.swing.JLabel imageLabel;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JList<String> jList2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JButton movieLibraryButton;
     private javax.swing.JPanel movieLibraryPanel;
     private javax.swing.JScrollPane movieTitleScrollPane;
+    private javax.swing.JScrollPane overviewScrollPane;
     private javax.swing.JTextArea overviewTextArea;
     private javax.swing.JButton resetButton;
     private javax.swing.JList<String> showMovieList;

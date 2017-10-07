@@ -7,10 +7,10 @@ import java.util.logging.Logger;
 
 public class DbUtils {
     private static Connection con;
-    private static String databaseurl = "jdbc:derby://localhost:1527/ganesh";
+    private static String databaseurl = "jdbc:derby://localhost:1527/ganesh1";
     private static String password =  "ganesh";
     private static String user =  "ganesh";
-	private static String className = "org.apache.derby.jdbc.ClientDriver";
+    private static String className = "org.apache.derby.jdbc.ClientDriver";
  
     public static void initDb()
 	{     
@@ -34,7 +34,8 @@ public class DbUtils {
                     + "MovieCast varchar(5000), "
                     + "PosterPath varchar(50), "
                     + "FolderName varchar(100), "
-                    + "Overview varchar(1000)"
+                    + "Overview varchar(1000), "
+                  + "FolderBasePath varchar(500)"
                     + ")");
           ps1.executeUpdate();
         } catch (SQLException ex) {
@@ -55,7 +56,7 @@ public class DbUtils {
         }
     } 
 	
-	public static ArrayList<HashMap<String,String>> getMovieDetails()
+     public static ArrayList<HashMap<String,String>> getMovieDetails()
 	{
         try {
             Statement st = con.createStatement();
@@ -139,10 +140,10 @@ public class DbUtils {
 	}
 	
     public static void storeInMovieDb(HashMap<String,String> hm){
-        String id, title, overview, posterPath, genres, cast, folderName;
+        String id, title, overview, posterPath, genres, cast, folderName,FolderBasePath;
         try {
             PreparedStatement ps1=con.prepareStatement("INSERT INTO Movies(MovieTitle, MovieId,"
-					+"Genre, MovieCast, PosterPath, FolderName, Overview) VALUES(?,?,?,?,?,?,?)");
+					+"Genre, MovieCast, PosterPath, FolderName, Overview, FolderBasePath) VALUES(?,?,?,?,?,?,?,?)");
             id = hm.get("Id");
             title = hm.get("Title").replace("'", "''");
             //System.out.println(title);
@@ -151,6 +152,7 @@ public class DbUtils {
             genres = hm.get("Genres");
             cast = hm.get("Cast");
             folderName = hm.get("FolderName");
+            FolderBasePath = hm.get("FolderBasePath");
             ps1.setString(1, title);
             ps1.setString(2,id);
             ps1.setString(3,genres);
@@ -158,6 +160,7 @@ public class DbUtils {
             ps1.setString(5,posterPath);
             ps1.setString(6,folderName);           
             ps1.setString(7,overview);
+            ps1.setString(8,FolderBasePath);
             ps1.executeUpdate();                   
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -201,18 +204,30 @@ public class DbUtils {
 	
 }  
         
-    public static void deleteMoviesByFolderName(String FolderName)
+//    public static void deleteMoviesByFolderName(String FolderName)
+//	{
+//        try {
+//            String query = "DELETE FROM MOVIES WHERE  FolderName = '" + FolderName.replace("'", "''")+"'";
+//            //System.out.println(query);
+//            PreparedStatement ps1 = con.prepareStatement(query);
+//            ps1.executeUpdate();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
+//    }
+//	
+//}  
+    public static void deleteMoviesByFolderBasePath(String FolderBasePath)
 	{
         try {
-            String query = "DELETE FROM MOVIES WHERE  FolderName = '" + FolderName.replace("'", "''")+"'";
-            //System.out.println(query);
+            String query = "DELETE FROM MOVIES WHERE  FolderBasePath = '" +FolderBasePath + "'";
+            System.out.println(query);
             PreparedStatement ps1 = con.prepareStatement(query);
             ps1.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
     }
 	
-}        
+}  
 
     public static int rowCount(String table)
 	{            
@@ -240,7 +255,8 @@ public class DbUtils {
     public static void setUser(String aUser) {
         user = aUser;
     }
-	public static void setClassName(String aClassName) {
+
+    public static void setClassName(String aClassName) {
         className = aClassName;
     }
 }
