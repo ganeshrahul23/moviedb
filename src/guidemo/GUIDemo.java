@@ -542,7 +542,13 @@ private String temp;
         ArrayList <String> foldersPresent = new ArrayList<>(); 
         for(String s: strings)
 		{
-            foldersPresent.addAll(FileUtils.getMovieNames(s));
+            File f = new File(s);
+            if(!f.exists()){
+                DbUtils.deleteLibraryFolders(s);
+                DbUtils.deleteMoviesByFolderBasePath(s);
+            }else{
+                foldersPresent.addAll(FileUtils.getMovieNames(s));
+            }
         }    
         Collections.sort(foldersPresent);        
         ArrayList<String> temp = new ArrayList<>();      
@@ -568,6 +574,16 @@ private String temp;
 					HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
 					if(hm != null)
 					{
+                        for(String s: strings)
+                        {
+                            File f = new File(s);
+                            boolean b = Arrays.asList(f.list()).contains(o.toString());
+                            if(b)
+                            {
+                                hm.put("FolderBasePath", s);
+                                break;
+                            }
+                        }                     
 						DbUtils.storeInMovieDb(hm);
 						System.out.println("Adding " + o.toString());
 					}
