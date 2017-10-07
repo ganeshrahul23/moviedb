@@ -35,7 +35,7 @@ public class DbUtils {
                     + "PosterPath varchar(50), "
                     + "FolderName varchar(100), "
                     + "Overview varchar(1000), "
-                  + "FolderBasePath varchar(500)"
+                    + "FolderBasePath varchar(500)"
                     + ")");
           ps1.executeUpdate();
         } catch (SQLException ex) {
@@ -233,7 +233,7 @@ public class DbUtils {
 	{            
         try {
             Statement st = con.createStatement();
-           ResultSet r = st.executeQuery("SELECT COUNT(*) AS rowcount FROM " + table);
+            ResultSet r = st.executeQuery("SELECT COUNT(*) AS rowcount FROM " + table);
             r.next();
             int count = r.getInt("rowcount");
             r.close();

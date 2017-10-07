@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 
 public class GUIDemo extends javax.swing.JFrame {
 public ArrayList<HashMap<String,String>> allMovies= new ArrayList<>();
-public int movieCount ;
 ArrayList<String> movieTitleal = new ArrayList<>();
 ArrayList<String> foldersListal = new ArrayList<>();
 private HashMap<String,String> genrehm = new HashMap<>();
@@ -29,7 +28,6 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         DbUtils.initDb();
         allMoviesal = DbUtils.getMovieDetails();
         getMovieData(); 
-        movieCount = movieTitleal.size();
         imagePath = UrlUtils.getBaseImagePath();
         initComponents();   
     }
@@ -43,7 +41,6 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         DbUtils.initDb();
         allMoviesal = DbUtils.getMovieDetails();
         getMovieData(); 
-        movieCount = movieTitleal.size();
         imagePath = UrlUtils.getBaseImagePath();
         initComponents();   
     }
@@ -451,14 +448,13 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 				HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
 				if(hm != null) 
 				{
-                                                                                                    hm.put("FolderBasePath", path);
+                    hm.put("FolderBasePath", path);
 					DbUtils.storeInMovieDb(hm);                       
 				}
             }
             DbUtils.storeInMovieLibraryFolderDbDb(path);
             allMoviesal = DbUtils.getMovieDetails();
             getMovieData();
-            movieCount = movieTitleal.size();
             addedFoldersList.setListData(DbUtils.getLibraryFolders());
             BrowseTextField.setText("");
             JOptionPane.showMessageDialog(null, "The Folders are Added");
@@ -471,15 +467,13 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 		{
              String temp =   addedFoldersList.getSelectedValue();     
              if(!Objects.equals(temp, ""))
-             {
-                             DbUtils.deleteLibraryFolders(temp);
-            DbUtils.deleteMoviesByFolderBasePath(temp);
-
-            allMoviesal = DbUtils.getMovieDetails();
-            getMovieData();
-            movieCount = movieTitleal.size();
-            addedFoldersList.setListData(DbUtils.getLibraryFolders());
-            JOptionPane.showMessageDialog(null, "The Folders are Removed");
+             {  
+                DbUtils.deleteLibraryFolders(temp);
+                DbUtils.deleteMoviesByFolderBasePath(temp);
+                allMoviesal = DbUtils.getMovieDetails();
+                getMovieData();
+                addedFoldersList.setListData(DbUtils.getLibraryFolders());
+                JOptionPane.showMessageDialog(null, "The Folders are Removed");
              }
         }
     }//GEN-LAST:event_RemoveButtonActionPerformed
@@ -524,7 +518,6 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 				UrlUtils.saveImgByPosterPath(idhm.get(selValue), posterPathhm.get(selValue));
 				imageLabel.setIcon(new ImageIcon(temp));
 			}
-		   // System.out.println(selValue+"====   ");
 		   temp = casthm.get(selValue).replace(", ", "\n");
 		   castList.setListData(temp.split("[\\r\\n]+"));
 		   temp = genrehm.get(selValue).replace(", ", "\n");
