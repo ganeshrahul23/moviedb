@@ -21,12 +21,7 @@ public class UrlUtils
 	private static HttpGet httpget;
 	public static final HashMap<String, String> genresHM = getGenreIds();
 	private static String baseImagePath = "F:\\Academic\\JAVA\\moviedDB Data\\" ;
-
-    public static String getBaseImagePath() 
-	{
-        return baseImagePath;
-    }
-                  	
+                	
 	public static HashMap<String,String> getMovieDetailsByName(String moviename)
 	{
     	HashMap<String,String> hm = new HashMap<>();
@@ -56,8 +51,8 @@ public class UrlUtils
 				String [] genreIdsArray = resultOne.get("genre_ids").toString().replace("[", "").replace("]", "").split(",");
 				for(String s : genreIdsArray) 
 				{				
-						temp.append(genresHM.get(s));
-						temp.append(", ");
+					temp.append(genresHM.get(s));
+					temp.append(", ");
 				}
 				temp.deleteCharAt(temp.length() - 1);
 				temp.deleteCharAt(temp.length() - 1);
@@ -211,6 +206,10 @@ public class UrlUtils
 
     public static void setBaseImagePath(String aBaseImagePath) {
         baseImagePath = aBaseImagePath;
-    }
+	}
 
+    public static String getBaseImagePath() 
+	{
+        return baseImagePath;
+    }	
 }

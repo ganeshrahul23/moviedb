@@ -55,7 +55,46 @@ public class DbUtils {
             ex.printStackTrace();
         }
     } 
+
+    public static void storeInMovieDb(HashMap<String,String> hm){
+        String id, title, overview, posterPath, genres, cast, folderName,FolderBasePath;
+        try {
+            PreparedStatement ps1=con.prepareStatement("INSERT INTO Movies(MovieTitle, MovieId,"
+					+"Genre, MovieCast, PosterPath, FolderName, Overview, FolderBasePath) VALUES(?,?,?,?,?,?,?,?)");
+            id = hm.get("Id");
+            title = hm.get("Title").replace("'", "''");
+            //System.out.println(title);
+            overview = hm.get("Overview");
+            posterPath = hm.get("PosterPath");
+            genres = hm.get("Genres");
+            cast = hm.get("Cast");
+            folderName = hm.get("FolderName");
+            FolderBasePath = hm.get("FolderBasePath");
+            ps1.setString(1, title);
+            ps1.setString(2,id);
+            ps1.setString(3,genres);
+            ps1.setString(4,cast);
+            ps1.setString(5,posterPath);
+            ps1.setString(6,folderName);           
+            ps1.setString(7,overview);
+            ps1.setString(8,FolderBasePath);
+            ps1.executeUpdate();                   
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }             
+    }
 	
+	public static void storeInMovieLibraryFolderDb(String addedFolder){
+        String id, title, overview, posterPath, genres, cast, folderName;
+        try {
+            PreparedStatement ps1=con.prepareStatement("INSERT INTO LibraryFolder(FolderPath) VALUES(?)");
+            ps1.setString(1, addedFolder);
+            ps1.executeUpdate();                   
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }             
+    }
+
      public static ArrayList<HashMap<String,String>> getMovieDetails()
 	{
         try {
@@ -138,45 +177,6 @@ public class DbUtils {
         }
         return null;
 	}
-	
-    public static void storeInMovieDb(HashMap<String,String> hm){
-        String id, title, overview, posterPath, genres, cast, folderName,FolderBasePath;
-        try {
-            PreparedStatement ps1=con.prepareStatement("INSERT INTO Movies(MovieTitle, MovieId,"
-					+"Genre, MovieCast, PosterPath, FolderName, Overview, FolderBasePath) VALUES(?,?,?,?,?,?,?,?)");
-            id = hm.get("Id");
-            title = hm.get("Title").replace("'", "''");
-            //System.out.println(title);
-            overview = hm.get("Overview");
-            posterPath = hm.get("PosterPath");
-            genres = hm.get("Genres");
-            cast = hm.get("Cast");
-            folderName = hm.get("FolderName");
-            FolderBasePath = hm.get("FolderBasePath");
-            ps1.setString(1, title);
-            ps1.setString(2,id);
-            ps1.setString(3,genres);
-            ps1.setString(4,cast);
-            ps1.setString(5,posterPath);
-            ps1.setString(6,folderName);           
-            ps1.setString(7,overview);
-            ps1.setString(8,FolderBasePath);
-            ps1.executeUpdate();                   
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }             
-    }
-	
-	public static void storeInMovieLibraryFolderDbDb(String addedFolder){
-        String id, title, overview, posterPath, genres, cast, folderName;
-        try {
-            PreparedStatement ps1=con.prepareStatement("INSERT INTO LibraryFolder(FolderPath) VALUES(?)");
-            ps1.setString(1, addedFolder);
-            ps1.executeUpdate();                   
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        }             
-    }
 	
 	public static void deleteLibraryFolders(String folder)
 	{

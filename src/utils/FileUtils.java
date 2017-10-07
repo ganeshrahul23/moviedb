@@ -10,7 +10,7 @@ public class FileUtils {
 	
 	public static ArrayList<String> getMovieNames(String path)
 	{   
-                                         movieFilePaths.clear();
+        movieFilePaths.clear();
 		ArrayList<String> movieNames = new ArrayList<>();
 		//String path = "F:\\Videos\\Movies\\English";	                                 
 		File f =  new File(path);			

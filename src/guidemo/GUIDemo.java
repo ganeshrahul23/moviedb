@@ -9,20 +9,26 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class GUIDemo extends javax.swing.JFrame {
-public ArrayList<HashMap<String,String>> allMovies= new ArrayList<>();
-ArrayList<String> movieTitleal = new ArrayList<>();
-ArrayList<String> foldersListal = new ArrayList<>();
+
+private ArrayList<HashMap<String,String>> allMoviesal;
+
+private ArrayList<String> movieTitleal = new ArrayList<>();
+private ArrayList<String> foldersListal = new ArrayList<>();
+private ArrayList<String> castBasedDetails = new ArrayList<>();
+private ArrayList<String> genreBasedDetails = new ArrayList<>();
+
 private HashMap<String,String> genrehm = new HashMap<>();
 private HashMap<String,String> casthm = new HashMap<>();
+/*
+    Program will throw error if the cast of a particular movie returns as ""(empty).
+*/
 private HashMap<String,String> overviewhm = new HashMap<>();
 private HashMap<String,String> posterPathhm = new HashMap<>();
 private HashMap<String,String> idhm = new HashMap<>();
-private ArrayList<String> castBasedDetails = new ArrayList<>();
-private ArrayList<String> genreBasedDetails = new ArrayList<>();
-private String imagePath ;
 
+private String imagePath;
+private String temp;
 
-private ArrayList<HashMap<String,String>> allMoviesal ;
     public GUIDemo() 
 	{         
         DbUtils.initDb();
@@ -31,6 +37,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         imagePath = UrlUtils.getBaseImagePath();
         initComponents();   
     }
+    
     public GUIDemo(String imagePath,String className,String dburl,String password,String user) 
 	{  
         UrlUtils.setBaseImagePath(imagePath);
@@ -57,7 +64,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
         posterPathhm.clear();
         for(int i=0; i<allMoviesal.size(); i++)
 		{
-			String temp = allMoviesal.get(i).get("Title").replace("''", "'");
+			temp = allMoviesal.get(i).get("Title").replace("''", "'");
 			movieTitleal.add(temp);
 			foldersListal.add(allMoviesal.get(i).get("FolderName"));
 			genrehm.put(temp, allMoviesal.get(i).get("Genres"));
@@ -452,20 +459,19 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 					DbUtils.storeInMovieDb(hm);                       
 				}
             }
-            DbUtils.storeInMovieLibraryFolderDbDb(path);
+            DbUtils.storeInMovieLibraryFolderDb(path);
             allMoviesal = DbUtils.getMovieDetails();
             getMovieData();
             addedFoldersList.setListData(DbUtils.getLibraryFolders());
             BrowseTextField.setText("");
-            JOptionPane.showMessageDialog(null, "The Folders are Added");
-           
+            JOptionPane.showMessageDialog(null, "The Folders are Added");         
     }                   
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed
         if(addedFoldersList.getSelectedIndex() != -1)
 		{
-             String temp =   addedFoldersList.getSelectedValue();     
+             temp = addedFoldersList.getSelectedValue();     
              if(!Objects.equals(temp, ""))
              {  
                 DbUtils.deleteLibraryFolders(temp);
@@ -485,8 +491,8 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
             titleTextField.setText(movieTitleal.get(0));
 			genreList.setListData(genrehm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+"));
 			castList.setListData(casthm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+"));                
-			String selValue = titleTextField.getText();
-			String temp = imagePath + idhm.get(selValue) + ".jpg";
+            String selValue = titleTextField.getText();
+			temp = imagePath + idhm.get(selValue) + ".jpg";
 			File f = new File(temp);
 			if(f.exists())
 			{
@@ -507,7 +513,6 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
 			
             String selValue = showMovieList.getSelectedValue();
 			titleTextField.setText(selValue);
-			String temp;
 			temp = imagePath + idhm.get(selValue) + ".jpg";
 			File f = new File(temp);
 			if(f.exists())
@@ -576,7 +581,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     private void castListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_castListValueChanged
         if(castList.getSelectedIndex() != -1)
 		{
-			String temp =  castList.getSelectedValue();
+			temp =  castList.getSelectedValue();
 			if(!(Objects.equals(temp, "") || Objects.equals(temp, null)))
 			{
 				castBasedDetails.clear();
@@ -594,7 +599,7 @@ private ArrayList<HashMap<String,String>> allMoviesal ;
     private void genreListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_genreListValueChanged
         if(genreList.getSelectedIndex() != -1)
 		{
-            String temp =  genreList.getSelectedValue();
+            temp =  genreList.getSelectedValue();
 			if(!(Objects.equals(temp, "") || Objects.equals(temp, null)))
 			{
 				genreBasedDetails.clear();
