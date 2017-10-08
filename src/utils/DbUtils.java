@@ -22,11 +22,31 @@ public class DbUtils {
             System.out.println(e);
         }       
     }
+
+    public static boolean checkTable(String table)
+    {
+        boolean tExists = false;
+        try (ResultSet rs = con.getMetaData().getTables(null, null, table, null)) 
+        {
+            while (rs.next()) { 
+                String tName = rs.getString("TABLE_NAME");
+                if (tName != null && tName.equals(table)) {
+                    tExists = true;
+                    break;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+        return tExists;
+    }
     
     public static void createMovieDb()
     {
         try {      
-          PreparedStatement ps1 = con.prepareStatement("create table Movies ("
+            if(Objects.equals(className, "org.apache.derby.jdbc.ClientDriver"))
+            {
+                PreparedStatement ps1 = con.prepareStatement("create table Movies ("
                     + "id integer generated always as identity (start with 1,increment by 1),"
                     + "MovieTitle varchar(100), "
                     + "MovieId varchar(10), "
@@ -37,7 +57,23 @@ public class DbUtils {
                     + "Overview varchar(1000), "
                     + "FolderBasePath varchar(500)"
                     + ")");
-          ps1.executeUpdate();
+                ps1.executeUpdate();
+            }
+            else if(Objects.equals(className, "com.mysql.jdbc.Driver"))
+            {
+                PreparedStatement ps1 = con.prepareStatement("create table Movies ("
+                    + "id MEDIUMINT NOT NULL AUTO_INCREMENT,"
+                    + "MovieTitle varchar(100), "
+                    + "MovieId varchar(10), "
+                    + "Genre varchar(70), "
+                    + "MovieCast varchar(5000), "
+                    + "PosterPath varchar(50), "
+                    + "FolderName varchar(100), "
+                    + "Overview varchar(1000), "
+                    + "FolderBasePath varchar(500), PRIMARY KEY (id)"
+                    + ")");
+                 ps1.executeUpdate();               
+            }         
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -45,15 +81,26 @@ public class DbUtils {
     
     public static void createMovieLibraryFolderDb()
     {
-        try {      
-          PreparedStatement ps1 = con.prepareStatement("create table LibraryFolder ("
-                    + "id integer generated always as identity (start with 1,increment by 1),"
-                    + "FolderPath varchar(50) "
-                    + ")");
-          ps1.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        try {   
+            if(Objects.equals(className, "org.apache.derby.jdbc.ClientDriver"))
+            {
+                PreparedStatement ps1 = con.prepareStatement("create table LibraryFolder ("
+                   + "id integer generated always as identity (start with 1,increment by 1),"
+                   + "FolderPath varchar(50) "
+                   + ")");
+                ps1.executeUpdate();
+            }
+            else if(Objects.equals(className, "com.mysql.jdbc.Driver"))
+            {
+                PreparedStatement ps1 = con.prepareStatement("create table LibraryFolder ("
+                   + "id MEDIUMINT NOT NULL AUTO_INCREMENT,"
+                   + "FolderPath varchar(50) ,PRIMARY KEY (id)"
+                   + ")");  
+                ps1.executeUpdate();
+            }
+       } catch (SQLException ex) {
+           ex.printStackTrace();
+       }
     } 
 
     public static void storeInMovieDb(HashMap<String,String> hm){
@@ -277,5 +324,9 @@ public class DbUtils {
 
     public static void setClassName(String aClassName) {
         className = aClassName;
+    }
+	
+	public static String getClassName() {
+        return className;
     }
 }

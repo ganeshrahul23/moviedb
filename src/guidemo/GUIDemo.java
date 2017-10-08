@@ -26,16 +26,34 @@ private HashMap<String,String> overviewhm = new HashMap<>();
 private HashMap<String,String> posterPathhm = new HashMap<>();
 private HashMap<String,String> idhm = new HashMap<>();
 
-private String imagePath;
+private static String imagePath;
 private String temp;
 
     public GUIDemo() 
 	{         
         DbUtils.initDb();
+        if(Objects.equals(DbUtils.getClassName(), "org.apache.derby.jdbc.ClientDriver"))
+        {
+            if(!DbUtils.checkTable("MOVIES")){
+                DbUtils.createMovieDb();
+            }
+            if(!DbUtils.checkTable("LIBRARYFOLDER")){
+                DbUtils.createMovieLibraryFolderDb();
+            }
+        }
+        else if(Objects.equals(DbUtils.getClassName(), "com.mysql.jdbc.Driver"))
+        {
+            if(!DbUtils.checkTable("movies")){
+                DbUtils.createMovieDb();
+            }
+            if(!DbUtils.checkTable("libraryfolder")){
+                DbUtils.createMovieLibraryFolderDb();
+            }       
+        }
         allMoviesal = DbUtils.getMovieDetails();
         getMovieData(); 
         imagePath = UrlUtils.getBaseImagePath();
-        initComponents();   
+        initComponents();    
     }
     
     public GUIDemo(String imagePath,String className,String dburl,String password,String user) 
@@ -46,6 +64,24 @@ private String temp;
         DbUtils.setPassword(password);
         DbUtils.setUser(user);
         DbUtils.initDb();
+        if(Objects.equals(DbUtils.getClassName(), "org.apache.derby.jdbc.ClientDriver"))
+        {
+            if(!DbUtils.checkTable("MOVIES")){
+                DbUtils.createMovieDb();
+            }
+            if(!DbUtils.checkTable("LIBRARYFOLDER")){
+                DbUtils.createMovieLibraryFolderDb();
+            }
+        }
+        else if(Objects.equals(DbUtils.getClassName(), "com.mysql.jdbc.Driver"))
+        {
+            if(!DbUtils.checkTable("movies")){
+                DbUtils.createMovieDb();
+            }
+            if(!DbUtils.checkTable("libraryfolder")){
+                DbUtils.createMovieLibraryFolderDb();
+            }       
+        }   
         allMoviesal = DbUtils.getMovieDetails();
         getMovieData(); 
         imagePath = UrlUtils.getBaseImagePath();
@@ -491,7 +527,7 @@ private String temp;
 			genreList.setListData(genrehm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+"));
 			castList.setListData(casthm.get(titleTextField.getText()).replace(", ", "\n").split("[\\r\\n]+"));                
             String selValue = titleTextField.getText();
-			temp = imagePath + idhm.get(selValue) + ".jpg";
+			temp = UrlUtils.getBaseImagePath() + idhm.get(selValue) + ".jpg";
 			File f = new File(temp);
 			if(f.exists())
 			{
@@ -512,7 +548,7 @@ private String temp;
 			
             String selValue = showMovieList.getSelectedValue();
 			titleTextField.setText(selValue);
-			temp = imagePath + idhm.get(selValue) + ".jpg";
+			temp = UrlUtils.getBaseImagePath() + idhm.get(selValue) + ".jpg";
 			File f = new File(temp);
 			if(f.exists())
 			{
