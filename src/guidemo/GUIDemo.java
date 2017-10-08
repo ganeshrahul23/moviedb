@@ -51,10 +51,9 @@ private String temp;
         imagePath = UrlUtils.getBaseImagePath();
         initComponents();   
     }
-    
-    
-   public void getMovieData()
-   {
+     
+    public void getMovieData()
+    {
         movieTitleal.clear();
         foldersListal.clear();
         genrehm.clear();
@@ -84,7 +83,7 @@ private String temp;
         foldersListal.clear();
         foldersListal.addAll(hs);
         Collections.sort(foldersListal);           
-   } 
+    } 
     
     
 

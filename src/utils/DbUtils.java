@@ -219,22 +219,22 @@ public class DbUtils {
             ps1.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        }
 	
-}  
+    }  
         
-//    public static void deleteMoviesByFolderName(String FolderName)
-//	{
-//        try {
-//            String query = "DELETE FROM MOVIES WHERE  FolderName = '" + FolderName.replace("'", "''")+"'";
-//            //System.out.println(query);
-//            PreparedStatement ps1 = con.prepareStatement(query);
-//            ps1.executeUpdate();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
-//    }
-//	
-//}  
+    public static void deleteMoviesByFolderName(String FolderName)
+	{
+        try {
+            String query = "DELETE FROM MOVIES WHERE  FolderName = '" + FolderName.replace("'", "''")+"'";
+            //System.out.println(query);
+            PreparedStatement ps1 = con.prepareStatement(query);
+            ps1.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+	
+    }  
     public static void deleteMoviesByFolderBasePath(String FolderBasePath)
 	{
         try {
@@ -244,9 +244,9 @@ public class DbUtils {
             ps1.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        }
 	
-}  
+    }  
 
     public static int rowCount(String table)
 	{            
