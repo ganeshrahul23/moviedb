@@ -156,6 +156,25 @@ public class DbUtils {
         }
         return null;
     }
+	
+    public static ArrayList<String> getFolderNamesByFolderPath(String FolderPath)
+    {
+         ArrayList<String> hm = new ArrayList<>();
+         try {
+                Statement st = con.createStatement();
+                String query ="SELECT FolderName FROM MOVIES WHERE FOLDERBASEPATH = '" +FolderPath+"'";
+                ResultSet r = st.executeQuery(query);       
+                while(r.next())
+                {     
+                    hm.add(r.getString(1));        
+                }  
+                Collections.sort(hm);
+                return hm;
+        } catch (SQLException ex) {
+            Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+        return null;
+    }
            	
 	public static String[] getLibraryFolders()
 	{

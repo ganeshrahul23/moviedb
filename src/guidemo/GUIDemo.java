@@ -537,58 +537,44 @@ private String temp;
     }//GEN-LAST:event_homeLibraryButtonActionPerformed
 	
     private void updateLibraryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateLibraryButtonActionPerformed
-        ArrayList<String> moviesInDb = foldersListal;
         String[] strings = DbUtils.getLibraryFolders();
         ArrayList <String> foldersPresent = new ArrayList<>(); 
+		ArrayList <String> moviesInDb = new ArrayList<>(); 
         for(String s: strings)
 		{
             File f = new File(s);
-            if(!f.exists()){
-                DbUtils.deleteLibraryFolders(s);
-                DbUtils.deleteMoviesByFolderBasePath(s);
-            }else{
+            if(f.exists())
+            {
+				foldersPresent.clear();
+				moviesInDb.clear();
                 foldersPresent.addAll(FileUtils.getMovieNames(s));
+				moviesInDb.addAll(DbUtils.getFolderNamesByFolderPath(s));
+				Collections.sort(foldersPresent);
+				Collections.sort(moviesInDb);
+                if(moviesInDb.size() < foldersPresent.size())
+                {
+					foldersPresent.removeAll(moviesInDb);
+					for(Object o : foldersPresent)
+					{                                  
+						HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
+						if(hm != null)
+						{
+						    hm.put("FolderBasePath", s);			   
+							DbUtils.storeInMovieDb(hm);
+							System.out.println("Adding " + o.toString());
+						}
+					}											
+				}else if(moviesInDb.size() > foldersPresent.size())					
+					{        
+						moviesInDb.removeAll(foldersPresent);
+						for(Object o : moviesInDb)
+						{
+							System.out.println("Deleting " + o.toString());
+							DbUtils.deleteMoviesByFolderName(o.toString());
+						}                
+					}							
             }
-        }    
-        Collections.sort(foldersPresent);        
-        ArrayList<String> temp = new ArrayList<>();      
-        if(moviesInDb.size() == foldersPresent.size())
-        {        
-        }
-//        else if(moviesInDb.size() > foldersPresent.size())
-//        {        
-//			moviesInDb.removeAll(foldersPresent);
-//			temp = moviesInDb;
-//			for(Object o : temp)
-//			{
-//				System.out.println("Deleting " + o.toString());
-//				DbUtils.deleteMoviesByFolderName(o.toString());
-//			}                
-//        }
-        else if(moviesInDb.size() < foldersPresent.size())
-        {
-			foldersPresent.removeAll(moviesInDb);
-			temp = foldersPresent;
-			for(Object o : temp)
-			{                                  
-					HashMap<String,String> hm = UrlUtils.getMovieDetailsByName(o.toString());
-					if(hm != null)
-					{
-                        for(String s: strings)
-                        {
-                            File f = new File(s);
-                            boolean b = Arrays.asList(f.list()).contains(o.toString());
-                            if(b)
-                            {
-                                hm.put("FolderBasePath", s);
-                                break;
-                            }
-                        }                     
-						DbUtils.storeInMovieDb(hm);
-						System.out.println("Adding " + o.toString());
-					}
-			}                             
-        }    
+        }    		
         allMoviesal = DbUtils.getMovieDetails();
         getMovieData(); 
         JOptionPane.showMessageDialog(null, "The Library is Updated");
