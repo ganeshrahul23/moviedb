@@ -44,36 +44,18 @@ public class DbUtils {
     public static void createMovieDb()
     {
         try {      
-            if(Objects.equals(className, "org.apache.derby.jdbc.ClientDriver"))
-            {
-                PreparedStatement ps1 = con.prepareStatement("create table Movies ("
-                    + "id integer generated always as identity (start with 1,increment by 1),"
-                    + "MovieTitle varchar(100), "
-                    + "MovieId varchar(10), "
-                    + "Genre varchar(70), "
-                    + "MovieCast varchar(5000), "
-                    + "PosterPath varchar(50), "
-                    + "FolderName varchar(100), "
-                    + "Overview varchar(1000), "
-                    + "FolderBasePath varchar(500)"
-                    + ")");
-                ps1.executeUpdate();
-            }
-            else if(Objects.equals(className, "com.mysql.jdbc.Driver"))
-            {
-                PreparedStatement ps1 = con.prepareStatement("create table Movies ("
-                    + "id MEDIUMINT NOT NULL AUTO_INCREMENT,"
-                    + "MovieTitle varchar(100), "
-                    + "MovieId varchar(10), "
-                    + "Genre varchar(70), "
-                    + "MovieCast varchar(5000), "
-                    + "PosterPath varchar(50), "
-                    + "FolderName varchar(100), "
-                    + "Overview varchar(1000), "
-                    + "FolderBasePath varchar(500), PRIMARY KEY (id)"
-                    + ")");
-                 ps1.executeUpdate();               
-            }         
+            PreparedStatement ps1 = con.prepareStatement("create table Movies ("
+                + "id integer generated always as identity (start with 1,increment by 1),"
+                + "MovieTitle varchar(100), "
+                + "MovieId varchar(10), "
+                + "Genre varchar(70), "
+                + "MovieCast varchar(5000), "
+                + "PosterPath varchar(50), "
+                + "FolderName varchar(100), "
+                + "Overview varchar(1000), "
+                + "FolderBasePath varchar(500)"
+                + ")");
+            ps1.executeUpdate();        
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -82,26 +64,61 @@ public class DbUtils {
     public static void createMovieLibraryFolderDb()
     {
         try {   
-            if(Objects.equals(className, "org.apache.derby.jdbc.ClientDriver"))
-            {
-                PreparedStatement ps1 = con.prepareStatement("create table LibraryFolder ("
-                   + "id integer generated always as identity (start with 1,increment by 1),"
-                   + "FolderPath varchar(50) "
-                   + ")");
-                ps1.executeUpdate();
-            }
-            else if(Objects.equals(className, "com.mysql.jdbc.Driver"))
-            {
-                PreparedStatement ps1 = con.prepareStatement("create table LibraryFolder ("
-                   + "id MEDIUMINT NOT NULL AUTO_INCREMENT,"
-                   + "FolderPath varchar(50) ,PRIMARY KEY (id)"
-                   + ")");  
-                ps1.executeUpdate();
-            }
+            PreparedStatement ps1 = con.prepareStatement("create table LibraryFolder ("
+                + "id integer generated always as identity (start with 1,increment by 1),"
+                + "FolderPath varchar(50) "
+                + ")");
+            ps1.executeUpdate();
        } catch (SQLException ex) {
            ex.printStackTrace();
        }
     } 
+    
+    public static void createLoginInfoDb(){
+        try{
+            PreparedStatement ps1 = con.prepareStatement("create table LoginDetails("
+                    + "id integer generated always as identity (start with 1,increment by 1),"
+                    + "username varchar(30),"
+                    + "password varchar(30),"
+                    + "type varchar(10)"
+                    + ")");
+            ps1.executeUpdate();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public static boolean checkUserNameExists(String username){
+        try {
+            Statement st = con.createStatement();
+            ResultSet r = st.executeQuery("SELECT * FROM LoginDetails WHERE username='"+username +"'");        
+            if(r.next())
+            {
+                return true;
+            }else
+            {
+                return false;
+            }           
+        } catch (SQLException ex) {
+            Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    public static boolean checkPasswordExists(String password,String username,String type){
+        try {
+            Statement st = con.createStatement();
+            ResultSet r = st.executeQuery("SELECT * FROM LoginDetails WHERE username='"+username +"'"); 
+            if(r.next())
+            {
+                return (Objects.equals(password, r.getString(3))  && Objects.equals(type, r.getString(4)));
+            }
+        } catch (SQLException ex)
+           {
+             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        return false;
+    }
 
     public static void storeInMovieDb(HashMap<String,String> hm){
         String id, title, overview, posterPath, genres, cast, folderName,FolderBasePath;
@@ -141,6 +158,17 @@ public class DbUtils {
             System.out.println(ex);
         }             
     }
+        public static void storeinLoginInfoDb(String username,String password,String type){
+            try{
+                PreparedStatement ps1 = con.prepareStatement("INSERT INTO LoginDetails(username,password,type) VALUES(?,?,?)");
+                ps1.setString(1, username);
+                ps1.setString(2, password);
+                ps1.setString(3,type);
+                ps1.executeUpdate();       
+            } catch (Exception ex) {
+            System.out.println(ex);
+        }  
+        }
 
      public static ArrayList<HashMap<String,String>> getMovieDetails()
 	{
@@ -256,20 +284,7 @@ public class DbUtils {
 		}
 	
 	}
-        
-    public static void deleteMoviesById(String movieID)
-	{
-        try {
-            String query = "DELETE FROM MOVIES WHERE  MOVIEID = '" + movieID+"'";
-            //System.out.println(query);
-            PreparedStatement ps1 = con.prepareStatement(query);
-            ps1.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-	
-    }  
-        
+               
     public static void deleteMoviesByFolderName(String FolderName)
 	{
         try {
