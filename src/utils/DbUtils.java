@@ -92,11 +92,9 @@ public class DbUtils {
         try {
             Statement st = con.createStatement();
             ResultSet r = st.executeQuery("SELECT * FROM LoginDetails WHERE username='"+username +"'");        
-            if(r.next())
-            {
+            if(r.next()){
                 return true;
-            }else
-            {
+            }else{
                 return false;
             }           
         } catch (SQLException ex) {
@@ -109,14 +107,12 @@ public class DbUtils {
         try {
             Statement st = con.createStatement();
             ResultSet r = st.executeQuery("SELECT * FROM LoginDetails WHERE username='"+username +"'"); 
-            if(r.next())
-            {
+            if(r.next()){
                 return (Objects.equals(password, r.getString(3))  && Objects.equals(type, r.getString(4)));
             }
-        } catch (SQLException ex)
-           {
-             Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
-           }
+        } catch (SQLException ex) {
+            Logger.getLogger(DbUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return false;
     }
 

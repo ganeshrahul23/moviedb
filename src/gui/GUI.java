@@ -738,8 +738,13 @@ private String temp;
             if(DbUtils.checkPasswordExists(tempPassword, tempUserName,  GUI.userType)){  
                  userNameTextField.setText("");
                  passwordField.setText("");
-                 CardLayout cl = (CardLayout)(basePanel.getLayout());
-                 cl.show(basePanel, "card3");
+                 if(Objects.equals(GUI.userType, "Admin")){
+                    CardLayout cl = (CardLayout)(basePanel.getLayout());
+                     cl.show(basePanel, "card3");
+                 }else{
+                     homeLibraryButton.setText("Logout");
+                     openLibraryButton.doClick();
+                 }
             }else{
                 JOptionPane.showMessageDialog(null,"Enter username and password Again");
                 userNameTextField.setText("");
@@ -880,17 +885,25 @@ private String temp;
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButtonActionPerformed
-        CardLayout cl = (CardLayout)(basePanel.getLayout());
-        cl.show(basePanel, "card3");     
+                CardLayout cl = (CardLayout)(basePanel.getLayout());
+                 cl.show(basePanel, "card3");     
     }//GEN-LAST:event_OKButtonActionPerformed
 
     private void homeLibraryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeLibraryButtonActionPerformed
-        CardLayout cl = (CardLayout)(basePanel.getLayout());
-        cl.show(basePanel, "card3");
+        if(Objects.equals(homeLibraryButton.getText(), "Logout"))
+        {
+            CardLayout cl = (CardLayout)(basePanel.getLayout());
+            cl.show(basePanel, "card1");
+            homeLibraryButton.setText("Home");            
+        }else
+        {
+            CardLayout cl = (CardLayout)(basePanel.getLayout());
+            cl.show(basePanel, "card3");
+        }
     }//GEN-LAST:event_homeLibraryButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
-        openLibraryButton.doClick();
+       openLibraryButton.doClick();
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void showMovieListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_showMovieListValueChanged
@@ -946,8 +959,8 @@ private String temp;
     }//GEN-LAST:event_genreListValueChanged
 
     private void logOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutButtonActionPerformed
-        CardLayout cl = (CardLayout)(basePanel.getLayout());
-        cl.show(basePanel, "card1");
+                 CardLayout cl = (CardLayout)(basePanel.getLayout());
+                 cl.show(basePanel, "card1");
     }//GEN-LAST:event_logOutButtonActionPerformed
 
     private void RemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveButtonActionPerformed

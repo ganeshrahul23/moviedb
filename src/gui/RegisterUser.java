@@ -180,16 +180,14 @@ public class RegisterUser extends javax.swing.JFrame {
             {
                 if(!Objects.equals(tempPassword, ""))
                 {
-                    if(Objects.equals(tempPassword, tempPasswordAgain))
-                    {
+                    if(Objects.equals(tempPassword, tempPasswordAgain)){
                         DbUtils.storeinLoginInfoDb(tempUserName,tempPassword,"User");
                         JOptionPane.showMessageDialog(null, "User "+tempUserName +" is created");                        
                         userNameTextField.setText("");
                         enterPasswordField.setText(""); 
                         enterPasswordAgainField.setText("");
                         super.dispose();
-                    }else
-                    {
+                    }else{
                         JOptionPane.showMessageDialog(null,"Enter the password Again");
                         enterPasswordField.setText("");
                         enterPasswordAgainField.setText("");
@@ -208,7 +206,8 @@ public class RegisterUser extends javax.swing.JFrame {
         }
         userNameTextField.setText("");
         enterPasswordField.setText(""); 
-        enterPasswordAgainField.setText(""); 
+        enterPasswordAgainField.setText("");
+        
     }//GEN-LAST:event_registerButtonActionPerformed
 
     /**
